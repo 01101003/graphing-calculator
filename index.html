@@ -12,17 +12,15 @@
     <link rel="stylesheet" href="styles.css">
     <!-- Favicon -->
     <link rel="shortcut icon" href="images/graph_fav.png" type="image/x-icon">
-
 </head>
-<body >
+<body>
     <!-- Header Section -->
     <header class="bg-dark text-white text-center p-4">
         <img src="images/graph_fav.png" width="50" height="50">
         <h1>Graphing Calculator</h1>
         <div class="theme-container shadow-dark">
-            <img id="theme-icon" 
-            src="https://www.uplooder.net/img/image/2/addf703a24a12d030968858e0879b11e/moon.svg" alt="ERR">
-          </div>
+            <img id="theme-icon" src="images/sun.png" alt="ERR">
+        </div>
     </header>
     
     <!-- Calculator Section -->
@@ -32,10 +30,32 @@
                 <h2 class="text-center mb-3">Graph Your Equations</h2>
                 <form id="calculatorForm">
                     <div class="form-group">
+                        <label for="graphType">Choose Graph Type:</label>
+                        <select class="form-control" id="graphType">
+                            <option value="equation">Equation</option>
+                            <option value="function">Function</option>
+                        </select>
+                    </div>
+
+                    <!-- Equation Input -->
+                    <div class="form-group" id="equationInput">
                         <label for="equations">Enter Equations (comma-separated):</label>
                         <input type="text" class="form-control" id="equations" placeholder="e.g., y = x^2, y = sin(x)" required>
                         <small class="form-text text-muted">Supported Functions: sin, cos, tan, sqrt, log, exp, pi, e, and more.</small>
                     </div>
+
+                    <!-- Ellipsoid Option inside Equations -->
+                    <div class="form-group" id="ellipsoidOption" style="display: none;">
+                        <label for="ellipsoid-equation">Ellipsoid Equation:</label>
+                        <input type="text" class="form-control" id="ellipsoid-equation" placeholder="e.g., x^2/20 + y^2/30 = 1">
+                    </div>
+
+                    <!-- Function Input -->
+                    <div class="form-group" id="functionInput" style="display: none;">
+                        <label for="functions">Enter Function (y = f(x)):</label>
+                        <input type="text" class="form-control" id="functions" placeholder="e.g., x^2">
+                    </div>
+
                     <div class="form-group">
                         <label for="minX">Min X:</label>
                         <input type="number" class="form-control" id="minX" value="-10">
@@ -44,24 +64,17 @@
                         <label for="maxX">Max X:</label>
                         <input type="number" class="form-control" id="maxX" value="10">
                     </div>
-                    <div class="form-group">
-                        <label for="graphType">Graph Type:</label>
-                        <select class="form-control" id="graphType">
-                            <option value="line">Line Chart</option>
-                            <option value="scatter">Scatter Plot</option>
-                            <option value="bar">Bar Chart</option>
-                            <option value="pie">Pie Chart</option>
-                        </select>
-                    </div>
+
                     <button type="submit" class="btn btn-primary btn-block">Graph</button>
                     <div class="reset-container">
                         <button type="reset" class="btn btn-outline-secondary">Reset Equation</button>
                         <button type="button" class="btn btn-info" id="resetBtn">Reset Graph</button>
                     </div>
                 </form>
-
             </div>
         </div>
+        
+        <!-- Graph Display -->
         <div class="row mt-4 graphic-container">
             <div class="col-md-12">
                 <canvas id="graph" class="w-100"></canvas>
@@ -75,6 +88,25 @@
 
     <!-- Calculator JS -->
     <script src="calculator.js"></script>
-    
+
+    <script>
+        // Handle graph type selection and form display logic
+        $('#graphType').on('change', function() {
+            const selectedType = $(this).val();
+
+            // Hide all inputs initially
+            $('#equationInput').hide();
+            $('#functionInput').hide();
+            $('#ellipsoidOption').hide();
+
+            // Show the relevant input based on selected graph type
+            if (selectedType === 'equation') {
+                $('#equationInput').show();
+                $('#ellipsoidOption').show();  // Show ellipsoid option if equation is selected
+            } else if (selectedType === 'function') {
+                $('#functionInput').show();
+            }
+        }).trigger('change');  // Trigger change to display default input
+    </script>
 </body>
 </html>
